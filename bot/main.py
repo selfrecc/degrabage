@@ -7,8 +7,8 @@ from dotenv import load_dotenv
 
 load_dotenv()
 bot = Bot(token=os.getenv("BOT_TOKEN"))
-admin = os.getenv("ADMIN_ID")
-weburl = os.getenv("ADMIN_URL")
+admin = int(os.getenv("ADMIN_ID"))
+weburl = os.getenv("WEB_URL")
 dp = Dispatcher()
 
 @dp.message(Command("start"))
