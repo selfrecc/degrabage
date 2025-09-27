@@ -1,17 +1,20 @@
-<!-- webapp/index.html -->
 <!DOCTYPE html>
 <html>
 <head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <script src="https://telegram.org/js/telegram-web-app.js"></script>
+    <link rel="stylesheet" href="style.css">
 </head>
 <body>
     <form id="ticketForm">
-        <select name="service">
+        <select name="service" required>
+            <option value="">Choose service...</option>
             <option value="navidrome">Navidrome</option>
             <option value="mastodon">Mastodon</option>
             <option value="matrix">Matrix</option>
         </select>
-        <input type="text" name="username" placeholder="Desired username">
+        <input type="text" name="username" placeholder="Desired username" required>
         <button type="submit">Submit Request</button>
     </form>
     
