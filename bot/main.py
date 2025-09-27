@@ -1,6 +1,6 @@
 from aiogram import Bot, Dispatcher, types
-from aiogram.filters import Command, CallbackQuery
-from aiogram.types import WebAppInfo, MenuButtonWebApp
+from aiogram.filters import Command
+from aiogram.types import WebAppInfo, MenuButtonWebApp, CallbackQuery
 import asyncio
 import json
 import os
@@ -60,7 +60,7 @@ async def handle_all(message: types.Message):
                 ),
                 types.InlineKeyboardButton(
                     text="❌ Deny", 
-                    callback_data=f"deny_{user.id}"
+                    callback_data=f"deny_{user.id}_{data.get('service', 'unknown')}"
                 )
             ]])
             
@@ -70,7 +70,7 @@ async def handle_all(message: types.Message):
                 parse_mode="Markdown",
                 reply_markup=admin_keyboard
             )
-            await message.answer("Your request has been submitted!")
+            await message.answer("Your request has been submitted! Waiting for verdict...")
             
         except Exception as e:
             print(f"Error processing data: {e}")
@@ -81,7 +81,7 @@ async def approve_request(callback: types.CallbackQuery):
     try:
         parts = callback.data.split('_')
         user_id = int(parts[1])
-        service = parts[2] if len(parts) > 2 else "the requested"
+        service = parts[2] if len(parts) > 2 else "requested"
         
         # Notify the user
         await bot.send_message(
@@ -103,13 +103,14 @@ async def approve_request(callback: types.CallbackQuery):
 @dp.callback_query(lambda c: c.data.startswith('deny_'))
 async def deny_request(callback: types.CallbackQuery):
     try:
-        _, user_id = callback.data.split('_')
-        user_id = int(user_id)
+        parts = callback.data.split('_')
+        user_id = int(parts[1])
+        service = parts[2] if len(parts) > 2 else "requested"
         
         # Notify the user
         await bot.send_message(
             user_id, 
-            "Unfortunately, your account request has been denied."
+            f"Unfortunately, your {service} account has been denied."
         )
         
         # Update admin message to show it was denied
