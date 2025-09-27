@@ -24,6 +24,7 @@ async def start(message: types.Message):
 
 @dp.message(lambda message: message.web_app_data is not None)
 async def handle_webapp_data(message: types.Message):
+    print("ticket catched")
     data = json.loads(message.web_app_data.data)
     
     # Get user info
